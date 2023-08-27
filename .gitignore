@@ -1,0 +1,10 @@
+owo.html
+*.pyc
+images/
+pages/
+RESPONSES/
+
+done.txt
+failed.txt
+nonexistent.txt
+nonfatal.txt
