@@ -1,7 +1,12 @@
 from asyncio import Task
 import asyncio
+from concurrent.futures import ProcessPoolExecutor
 import time
 from typing import Callable
+
+from db.VARS import DbVars
+from db.queries import Queries
+from db.utils import DbUtils
 
 def sec_to_min_hours(seconds):
     min, sec = divmod(seconds, 60)
@@ -10,6 +15,10 @@ def sec_to_min_hours(seconds):
         return '%ds %dm %dh' % (sec, min, hour)
     else:
         return '%ds %dm' % (sec, min)
+
+queue = asyncio.Queue()
+p = ProcessPoolExecutor(max_workers=125)
+loop = asyncio.get_event_loop()
 
 class AsyncLimiter:
     tasks: list[Task]
@@ -22,7 +31,7 @@ class AsyncLimiter:
 
     def __init__(self,
                  function_to_task, #Function to call
-                 print_progress_str: str = "Downloaded/Remaining tasks: {downloaded!s}/{remaining!s}, Running tasks: {running_tasks!s} ({done_tasks!s} done, {failed_tasks!s} failed, {skipped_tasks!s} skips) {running_time!s} {locked!s}    ",
+                 print_progress_str: str = "Downloaded/Remaining tasks: {downloaded!s}/{remaining!s}, Running tasks: {running_tasks!s} ({done_tasks!s} done, {failed_tasks!s} failed, {skipped_tasks!s} skips) {running_time!s} {locked!s}",
                  max_task_count: int = 1,
                  polling_sleep: float = .2
                  ) -> None:
@@ -44,38 +53,20 @@ class AsyncLimiter:
         self.lock_nonexistent = False
         
 
-    async def wait_global(self):
-        if self.last_global_lock + 20 >= time.time():
-            return
-        self.last_global_lock = time.time()
-        self.global_lock = True
-        await asyncio.sleep(3)
-        self.global_lock = False
+    def wait_global(self):
+        # if self.last_global_lock + 20 >= time.time():
+        #     return
+        # self.last_global_lock = time.time()
+        # self.global_lock = True
+        time.sleep(1)
+        # self.global_lock = False
         return
 
-    async def done(self, element):
-        while self.lock_done:
-            await asyncio.sleep(self.polling_sleep)
-        
-        self.lock_done = True
-        with open("done.txt", "a") as donefile:
-            donefile.write(str(element) + "\n")
-        self.lock_done = False
-        
-        self.done_tasks += 1
-
-        return False
-
-    async def nonexistent(self, element):
-        while self.lock_done:
-            await asyncio.sleep(self.polling_sleep)
-        
-        self.lock_done = True
-        with open("nonexistent.txt", "a") as donefile:
-            donefile.write(str(element) + "\n")
-        self.lock_done = False
-
-        await self.done(element)
+    def nonexistent(self, element):
+        DbVars.Queue.add_instuction(
+            Queries.get_insert_query(),
+            (element, None, None, None, None, None, None, None, None, None, None)
+        )
 
         return True
 
@@ -87,42 +78,38 @@ class AsyncLimiter:
     #     return fail(elem)
     #
     # Will automatically add back to the remaining list & return false
-    async def fail(self, element):
+    # async def fail(self, element):
+    #     while self.lock_fail:
+    #         await asyncio.sleep(self.polling_sleep)
+        
+    #     self.lock_fail = True
+    #     with open("failed.txt", "a") as failedfile:
+    #         failedfile.write(str(element) + "\n")
+    #     self.lock_fail = False
+
+    #     self.failed_tasks_count += 1
+
+    #     return False
+
+
+    def fail_retry(self, element, text):
         while self.lock_fail:
-            await asyncio.sleep(self.polling_sleep)
+            time.sleep(self.polling_sleep)
         
         self.lock_fail = True
         with open("failed.txt", "a") as failedfile:
-            failedfile.write(str(element) + "\n")
+            failedfile.write(text + "\n\n")
         self.lock_fail = False
 
-        self.failed_tasks_count += 1
-
-        return False
-    
-    async def fail_nonfatal(self, url):
-        while self.lock_fail:
-            await asyncio.sleep(self.polling_sleep)
-        
-        self.lock_fail = True
-        with open("nonfatal.txt", "a") as failedfile:
-            failedfile.write(url + "\n")
-        self.lock_fail = False
-
-        self.failed_tasks_count += 1
-
-        return False
-
-    async def fail_retry(self, element):
-        await asyncio.sleep(1)
         self.done_tasks_count -= 1
         self.failed_tasks_count += 1
         self.remaining_elements.insert(5, element)
 
+        time.sleep(1)
         return False
 
     async def grab_all(self):
-        while True:    
+        while True:
             for element in self.remaining_elements:
                 if (len(self.tasks) > self.max_task_count):
                     break

@@ -9,3 +9,8 @@ done.txt
 failed.txt
 nonexistent.txt
 nonfatal.txt
+
+proxies
+proxiesformatted
+funcraft_database.db
+funcraft_database.db-journal
