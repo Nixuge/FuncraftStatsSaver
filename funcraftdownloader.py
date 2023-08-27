@@ -7,6 +7,8 @@ from asynclimiter import AsyncLimiter
 
 BASE_URL = "https://www.funcraft.net/fr/joueur/"
 
+# If anyone comes here, yes, those are exposed proxies.
+# I'll remove them once I'm done w saving as much as possible.
 PROXIES = [
     {"http://": "http://esmbmiqf:ex5zd8godsmp@2.56.119.93:5074"},
     {"http://": "http://esmbmiqf:ex5zd8godsmp@185.199.229.156:7492"},
