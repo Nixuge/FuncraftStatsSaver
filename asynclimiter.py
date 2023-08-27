@@ -45,12 +45,13 @@ class AsyncLimiter:
         
 
     async def wait_global(self):
-        if self.last_global_lock + 5 >= time.time():
+        if self.last_global_lock + 20 >= time.time():
             return
         self.last_global_lock = time.time()
         self.global_lock = True
-        await asyncio.sleep(5)
+        await asyncio.sleep(3)
         self.global_lock = False
+        return
 
     async def done(self, element):
         while self.lock_done:

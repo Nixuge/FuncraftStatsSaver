@@ -10,21 +10,21 @@ BASE_URL = "https://www.funcraft.net/fr/joueur/"
 # If anyone comes here, yes, those are exposed proxies.
 # I'll remove them once I'm done w saving as much as possible.
 PROXIES = [
-    {"http://": "http://esmbmiqf:ex5zd8godsmp@2.56.119.93:5074"},
-    {"http://": "http://esmbmiqf:ex5zd8godsmp@185.199.229.156:7492"},
-    {"http://": "http://esmbmiqf:ex5zd8godsmp@185.199.228.220:7300"},
-    {"http://": "http://esmbmiqf:ex5zd8godsmp@185.199.231.45:8382"},
-    {"http://": "http://esmbmiqf:ex5zd8godsmp@188.74.210.207:6286"},
-    {"http://": "http://esmbmiqf:ex5zd8godsmp@188.74.183.10:8279"},
-    {"http://": "http://esmbmiqf:ex5zd8godsmp@188.74.210.21:6100"},
-    {"http://": "http://esmbmiqf:ex5zd8godsmp@45.155.68.129:8133"},
-    {"http://": "http://esmbmiqf:ex5zd8godsmp@154.95.36.199:6893"},
-    {"http://": "http://esmbmiqf:ex5zd8godsmp@45.94.47.66:8110"},
+    {"https://": "http://esmbmiqf:ex5zd8godsmp@2.56.119.93:5074"},
+    {"https://": "http://esmbmiqf:ex5zd8godsmp@185.199.229.156:7492"},
+    {"https://": "http://esmbmiqf:ex5zd8godsmp@185.199.228.220:7300"},
+    {"https://": "http://esmbmiqf:ex5zd8godsmp@185.199.231.45:8382"},
+    {"https://": "http://esmbmiqf:ex5zd8godsmp@188.74.210.207:6286"},
+    {"https://": "http://esmbmiqf:ex5zd8godsmp@188.74.183.10:8279"},
+    {"https://": "http://esmbmiqf:ex5zd8godsmp@188.74.210.21:6100"},
+    {"https://": "http://esmbmiqf:ex5zd8godsmp@45.155.68.129:8133"},
+    {"https://": "http://esmbmiqf:ex5zd8godsmp@154.95.36.199:6893"},
+    {"https://": "http://esmbmiqf:ex5zd8godsmp@45.94.47.66:8110"},
 ]
 
 class ProfileDler(AsyncLimiter):
     def __init__(self) -> None:
-        super().__init__(self.dl_profile, max_task_count=3, polling_sleep=.01)
+        super().__init__(self.dl_profile, max_task_count=15, polling_sleep=.001)
 
     def contains(self, index):
         with open("done.txt", "r") as file:
