@@ -1,7 +1,4 @@
 import asyncio
-import gzip
-import re
-import httpx
 from db.VARS import DbVars
 from db.queries import Queries
 
@@ -15,9 +12,11 @@ async def main():
     await asyncio.sleep(1)
         
     dler = ProfileDler()
-    dler.remaining_elements = list(range(513000, 2363980))
+    dler.remaining_elements = list(range(853000, 2363980))
     await dler.grab_all()
 
 
 asyncio.run(main())
 DbVars.Queue.should_stop = True
+
+#START INDEX FOR BAN PARSING: 853000

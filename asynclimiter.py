@@ -49,7 +49,7 @@ class AsyncLimiter:
         self.global_lock = False
         self.last_global_lock = 0
         self.lock_fail = False
-        self.lock_done = False
+        self.lock_ban = False
         self.lock_nonexistent = False
         
 
@@ -91,6 +91,14 @@ class AsyncLimiter:
 
     #     return False
 
+    def ban(self, id, type):
+        while self.lock_ban:
+            time.sleep(self.polling_sleep)
+        
+        self.lock_ban = True
+        with open("ban.txt", "a") as failedfile:
+            failedfile.write(f"{id} ||| {type}\n")
+        self.lock_ban = False
 
     def fail_retry(self, element, text):
         while self.lock_fail:

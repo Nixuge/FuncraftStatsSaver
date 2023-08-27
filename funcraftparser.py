@@ -36,3 +36,10 @@ def parse_friend_html(html: str) -> list[str] | None:
         return None
     return result
     
+BAN_REGEX = re.compile("Ce joueur est banni \((.*?)\)")
+def parse_ban(html: str) -> str | None:
+    ban = re.findall(BAN_REGEX, html)
+    if len(ban) == 0:
+        return None
+    
+    return ban[0].replace("&agrave; vie / tr&egrave;s longtemps", "à vie / très longtemps")

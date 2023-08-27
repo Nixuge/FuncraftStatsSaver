@@ -1,10 +1,9 @@
 owo.html
 *.pyc
-images/
-pages/
 testpages/
 RESPONSES/
 
+ban.txt
 done.txt
 failed.txt
 nonexistent.txt

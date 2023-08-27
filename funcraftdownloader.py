@@ -12,7 +12,7 @@ from db.VARS import DbVars
 from asynclimiter import AsyncLimiter
 from db.queries import Queries
 from db.utils import DbUtils
-from funcraftparser import parse_friend_html, parse_page_html
+from funcraftparser import parse_ban, parse_friend_html, parse_page_html
 
 BASE_URL = "https://www.funcraft.net/fr/joueur/"
 
@@ -173,6 +173,11 @@ class SaveThread(Thread):
             
             _temp_fl = bytes(json.dumps(friend_list), 'utf-8')
             gzipped_friend_list = gzip.compress(_temp_fl)
+
+            ban = parse_ban(r_page.text)
+            if ban:
+                self.clazz.ban(self.index, ban)
+
 
             DbVars.Queue.add_instuction(
                 Queries.get_insert_query(),
