@@ -15,7 +15,37 @@ BASE_URL = "https://community.funcraft.net/"
 
 all_elements = []
 
-for category in THREADS_PAGES.keys():
+# =====DONE=====
+# "annonces_regles"
+# "recrutement_staff",
+# discussions
+# "teams",
+
+# =====REMAINING=====
+# "presentation_de_teams",
+# "recrutement_teams",
+# "suggestions_idees",
+# "ameliorations",
+# "propositions_de_mini_jeux",
+# "astuces_entraide",
+# "demande_daide_questions",
+# "signaler_un_bug",
+# "bugs_traites",
+# "hors_sujet",
+# "les_jeux_forum",
+# "presentez_vous",
+# "presentation_du_staff",
+# "vos_talents_creations",
+# "demandes_de_creations",
+# "discussions_minecraft",
+# "maps_constructions_redstone",
+# "resource_packs",
+# "mods_plugins_outils"
+
+
+
+# for category in THREADS_PAGES.keys():
+for category in ["presentation_de_teams"]:
     DbVars.QueuePosts.add_important_instruction(QueriesPosts.get_create_repo_table_query(category))
     query = F"SELECT * FROM {category}"
     results = DbVars.ReadInstanceThreads.cursor.execute(query).fetchall()

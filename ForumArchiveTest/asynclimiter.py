@@ -28,7 +28,7 @@ class ThreadLimiter:
 
     def __init__(self,
                  function_to_task, #Function to call
-                 print_progress_str: str = "Downloaded/Remaining tasks: {downloaded!s}/{remaining!s}, Running tasks: {running_tasks!s} ({done_tasks!s} done, {failed_tasks!s} failed, {skipped_tasks!s} skips) {running_time!s}        ",
+                 print_progress_str: str = "Downloaded/Remaining tasks: {downloaded!s}/{remaining!s}, Running tasks: {running_tasks!s} ({done_tasks!s} done, {additional_tasks!s} additional, {failed_tasks!s} failed, {skipped_tasks!s} skips) {running_time!s}      ",
                  max_task_count: int = 1,
                  polling_sleep: float = .2
                  ) -> None:
@@ -38,6 +38,7 @@ class ThreadLimiter:
         self.tasks = []
         self.skipped_tasks = 0
         self.done_tasks = 0
+        self.additional_tasks = 0
         self.print_progress_str = print_progress_str
         self.function_for_task = function_to_task
         self.max_task_count = max_task_count
@@ -104,6 +105,7 @@ class ThreadLimiter:
                 running_tasks=len(self.tasks),
                 failed_tasks=self.failed_tasks_count,
                 skipped_tasks=self.skipped_tasks,
+                additional_tasks=self.additional_tasks,
                 done_tasks=self.done_tasks,
                 running_time=sec_to_min_hours(time.time() - self.start_time),
             ), end="\r")

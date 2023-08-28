@@ -19,7 +19,7 @@ from threads_pages import THREADS_PAGES
 
 class ForumPostSaver(ThreadLimiter):
     def __init__(self) -> None:
-        super().__init__(self.dl_page, max_task_count=40, polling_sleep=.1)
+        super().__init__(self.dl_page, max_task_count=100, polling_sleep=.1)
         self.lock_img = False
         self.lock_user = False
         self.lock_done = False
@@ -228,7 +228,9 @@ class ThreadSaver(Thread):
                 # print(f"failed req, retrying {result.status_code} + {likes_base_url}?page={i}")
                 time.sleep(1)
                 result = httpx.get(f"{likes_base_url}?page={i}", proxies=random.choice(PROXIES))
-            
+
+            self.clazz.additional_tasks += 1
+
             newsoup = BeautifulSoup(result.text, "html.parser")
             # print(f"{likes_base_url}?page={i}")
             likes_current_page = newsoup.find("ol", {"class": "overlayScroll"})
