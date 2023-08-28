@@ -1,3 +1,4 @@
+import os
 from db.VARS import DbVars
 from db.queries import QueriesPosts, QueriesThreads
 from postsaver import ForumPostSaver
@@ -27,6 +28,12 @@ for category in THREADS_PAGES.keys():
             element = (category, result_base_url + suffix, result[0])
             all_elements.append(element)
 
+for pathes in ["users/", "images/", "done"]:
+    if not os.path.isdir(pathes):
+        os.makedirs(pathes)
+
+
+# all_elements.append(("discussions", "https://community.funcraft.net/threads/rec-rush-elo-contenders-season-3.76816/page-6", 76816))
 
 saver.remaining_elements = all_elements
 saver.grab_all()
