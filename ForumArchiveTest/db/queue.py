@@ -1,3 +1,4 @@
+import os
 from sqlite3 import Connection, Cursor
 import sqlite3
 from threading import Thread
@@ -51,7 +52,9 @@ class DbQueue(Thread):
         except sqlite3.IntegrityError as e:
             # if not "UNIQUE contraint failed: " in str(e):
             print(f"INTEGRITYERROR HAPPENED: {e}")
-                    
+        except Exception as e:
+            print("SQL EXCEPTION ! KILLING ALL !")
+            os.system("killall python")
         # print(f"Added {count} values")
 
         self.connection.commit()
