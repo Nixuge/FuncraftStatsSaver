@@ -49,6 +49,7 @@ class DbQueue(Thread):
                 else:
                     self.cursor.execute(instruction[0])
         except sqlite3.IntegrityError as e:
+            # if not "UNIQUE contraint failed: " in str(e):
             print(f"INTEGRITYERROR HAPPENED: {e}")
                     
         # print(f"Added {count} values")

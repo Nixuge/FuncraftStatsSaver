@@ -10,6 +10,7 @@ failed.txt
 failed.txt.gz
 nonexistent.txt
 nonfatal.txt
+redirects.txt
 
 proxies
 proxiesformatted

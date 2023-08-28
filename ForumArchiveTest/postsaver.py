@@ -109,9 +109,13 @@ class ThreadSaver(Thread):
         # if True:
             prox = random.choice(PROXIES)
             req = httpx.get(self.url, proxies=prox)
+            if req.status_code == 301:
+                with open("redirects.txt", "a") as failedfile:
+                    failedfile.write(f"got 301 code for {self.url}: {req.next_request}" + "\n|||\n")
+                return
             if req.status_code != 200:
                 return self.clazz.fail_retry(self.data, f"Non 200 code for req for {self.url}: {req.status_code}")
-            
+
             self.soup = BeautifulSoup(req.text, "html.parser")
 
             instrs: list[tuple] = []
