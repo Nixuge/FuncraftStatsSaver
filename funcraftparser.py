@@ -12,9 +12,11 @@ class ParsedPage:
     stats_dict_str: str
 
 RANK_PATTERN = re.compile("<h1 class=\"playername\">(.*)</h1>")
+STATS_REGEX = re.compile("pstats= (.*?),pstatsTotal")
+
 #inscription, derniere_connexion, gloire, parties_jouees
 ALL_IN_ONE_PATTERN = re.compile("<strong>Inscription :<\/strong> <span class=\"tooltips\" title=\"(.*?)\">.*?</span> </div> <div class=\"info-entry\"> <strong>Dernière connexion :</strong> <span class=\"tooltips\" title=\"(.*?)\">.*?</span> </div> </div> <div class=\"info-stats\"> <div class=\"lbl lbl-me lbl-primary\"> <i class=\"fa fa-gamepad\"></i> (.*?) Gloires accumulées </div>  <div class=\"lbl lbl-me\"> (.*?) Parties jouées </div>")
-STATS_REGEX = re.compile("pstats= (.*?),pstatsTotal")
+
 
 def parse_page_html(html: str) -> ParsedPage:
     rank, = re.search(RANK_PATTERN, html).groups()

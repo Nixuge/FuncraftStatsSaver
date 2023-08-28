@@ -3,8 +3,6 @@ import sqlite3
 from threading import Thread
 from time import sleep
 
-from db.instance import DbInstance
-
 class DbQueue(Thread):
     # should be thread safe as lists are thread safe
     #TODO: use queue (https://www.geeksforgeeks.org/queue-in-python/ ?)
@@ -36,7 +34,7 @@ class DbQueue(Thread):
             self.cursor.execute(self.important_instructions.pop(0))
             
         self.connection.commit()
-        self.connection.serialize()
+        # self.connection.serialize()
 
     def _process_normal_instruction(self) -> None:
         # count = 0
@@ -51,7 +49,7 @@ class DbQueue(Thread):
         # print(f"Added {count} values")
 
         self.connection.commit()
-        self.connection.serialize()
+        # self.connection.serialize()
 
 
     def run(self) -> None:
@@ -59,7 +57,7 @@ class DbQueue(Thread):
             if self.should_stop:
                 break
 
-            sleep(0.5)
+            sleep(1)
 
             # perform create table queries BEFORE insert queries
             if len(self.important_instructions) > 0:

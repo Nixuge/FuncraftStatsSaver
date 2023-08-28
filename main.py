@@ -12,11 +12,11 @@ async def main():
     await asyncio.sleep(1)
         
     dler = ProfileDler()
-    dler.remaining_elements = list(range(853000, 2363980))
+    dler.remaining_elements = list(range(2150000, 2364000))
     await dler.grab_all()
 
 
 asyncio.run(main())
 DbVars.Queue.should_stop = True
 
-#START INDEX FOR BAN PARSING: 853000
+#START INDEX FOR BAN PARSING: aprox 853 000

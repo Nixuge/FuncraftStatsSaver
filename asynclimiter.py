@@ -91,12 +91,12 @@ class AsyncLimiter:
 
     #     return False
 
-    def ban(self, id, type):
+    def ban(self, id, type, filename):
         while self.lock_ban:
             time.sleep(self.polling_sleep)
         
         self.lock_ban = True
-        with open("ban.txt", "a") as failedfile:
+        with open(filename, "a") as failedfile:
             failedfile.write(f"{id} ||| {type}\n")
         self.lock_ban = False
 

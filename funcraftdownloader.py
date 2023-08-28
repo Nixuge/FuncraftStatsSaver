@@ -16,8 +16,6 @@ from funcraftparser import parse_ban, parse_friend_html, parse_page_html
 
 BASE_URL = "https://www.funcraft.net/fr/joueur/"
 
-# If anyone comes here, yes, those are exposed proxies.
-# I'll remove them once I'm done w saving as much as possible.
 PROXIES = [
 
 
@@ -25,7 +23,7 @@ PROXIES = [
 
 class ProfileDler(AsyncLimiter):
     def __init__(self) -> None:
-        super().__init__(self.dl_profile, max_task_count=200, polling_sleep=.01)
+        super().__init__(self.dl_profile, max_task_count=250, polling_sleep=.08)
 
     def contains(self, index):
         with open("done.txt", "r") as file:
@@ -176,7 +174,7 @@ class SaveThread(Thread):
 
             ban = parse_ban(r_page.text)
             if ban:
-                self.clazz.ban(self.index, ban)
+                self.clazz.ban(self.index, ban, "ban.txt")
 
 
             DbVars.Queue.add_instuction(
