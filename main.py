@@ -12,7 +12,7 @@ async def main():
     await asyncio.sleep(1)
         
     dler = ProfileDler()
-    dler.remaining_elements = list(range(2150000, 2364000))
+    dler.remaining_elements = list(range(0, 2364000))
     await dler.grab_all()
 
 

@@ -7,6 +7,7 @@ ban.txt
 ban_pre1M.txt
 done.txt
 failed.txt
+failed.txt.gz
 nonexistent.txt
 nonfatal.txt
 
@@ -15,3 +16,12 @@ proxiesformatted
 *.db
 *.db-journal
 *.db
+
+PROXIES.py
+
+
+# FORUM ARCHIVER
+ForumArchiveTest/done
+ForumArchiveTest/images
+ForumArchiveTest/users
+ForumArchiveTest/save.html

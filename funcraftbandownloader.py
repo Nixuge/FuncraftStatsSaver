@@ -2,16 +2,13 @@ import asyncio
 import random
 from threading import Thread
 import httpx
+from PROXIES import PROXIES
 
 from asynclimiter import AsyncLimiter
 from db.instance import DbInstance
 from funcraftparser import parse_ban
 
 BASE_URL = "https://www.funcraft.net/fr/joueur/"
-
-PROXIES = [
-
-]
 
 def get_deja_part_filename(filename: str):
     liste = []

@@ -7,6 +7,7 @@ import random
 import re
 from threading import Thread
 import httpx
+from PROXIES import PROXIES
 
 from db.VARS import DbVars
 from asynclimiter import AsyncLimiter
@@ -15,11 +16,6 @@ from db.utils import DbUtils
 from funcraftparser import parse_ban, parse_friend_html, parse_page_html
 
 BASE_URL = "https://www.funcraft.net/fr/joueur/"
-
-PROXIES = [
-
-
-]
 
 class ProfileDler(AsyncLimiter):
     def __init__(self) -> None:
@@ -130,7 +126,7 @@ class SaveThread(Thread):
 
             username = re.findall(f"<title>Redirecting to https:\/\/www\.funcraft\.net\/fr\/joueur\/{self.index}\/(.*)<\/title>", r_redirect.text)[0]
 
-            if "?" in username or "#" in username:
+            if "?" in username or "#" in username or "~" in username:
                 DbVars.Queue.add_instuction(
                     Queries.get_insert_query(),
                     (self.index, username, None,
@@ -197,7 +193,6 @@ class SaveThread(Thread):
             #     file.write(r_image.content)
 
         except Exception as e:
-            self.clazz.wait_global()
             return self.clazz.fail_retry(self.index, f"Failed exception: {e} for {self.index}")
 
         # await asyncio.sleep(1)
