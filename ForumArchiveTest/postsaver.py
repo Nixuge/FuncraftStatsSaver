@@ -19,7 +19,7 @@ from threads_pages import THREADS_PAGES
 
 class ForumPostSaver(ThreadLimiter):
     def __init__(self) -> None:
-        super().__init__(self.dl_page, max_task_count=100, polling_sleep=.1)
+        super().__init__(self.dl_page, max_task_count=50, polling_sleep=.0001)
         self.lock_img = False
         self.lock_user = False
         self.lock_done = False
@@ -108,7 +108,8 @@ class ThreadSaver(Thread):
         try:
         # if True:
             prox = random.choice(PROXIES)
-            req = httpx.get(self.url, proxies=prox)
+            # print(prox)
+            req = httpx.get(self.url, proxies=prox, headers={"Host": "community.funcraft.net"})
             if req.status_code == 301:
                 with open("redirects.txt", "a") as failedfile:
                     failedfile.write(f"got 301 code for {self.url}: {req.next_request}" + "\n|||\n")
@@ -155,6 +156,7 @@ class ThreadSaver(Thread):
 
 
         except Exception as e:
+            prox
             return self.clazz.fail_retry(self.data, f"Failed exception: {e} for {self.url}")
 
         self.clazz.done_tasks += 1
@@ -223,11 +225,12 @@ class ThreadSaver(Thread):
         page_max = math.ceil(count / 100)
         for i in range(1, page_max + 1):
             # print(f"making request: ?page={i}")
-            result = httpx.get(f"{likes_base_url}?page={i}", proxies=random.choice(PROXIES))
+            result = httpx.get(f"{likes_base_url}?page={i}", proxies=random.choice(PROXIES), headers={"Host": "community.funcraft.net"})
             while result.status_code != 200:
                 # print(f"failed req, retrying {result.status_code} + {likes_base_url}?page={i}")
+                self.clazz.additional_failed_tasks += 1
                 time.sleep(1)
-                result = httpx.get(f"{likes_base_url}?page={i}", proxies=random.choice(PROXIES))
+                result = httpx.get(f"{likes_base_url}?page={i}", proxies=random.choice(PROXIES), headers={"Host": "community.funcraft.net"})
 
             self.clazz.additional_tasks += 1
 

@@ -1,4 +1,8 @@
 import os
+import random
+
+import httpx
+from PROXIES import PROXIES
 from db.VARS import DbVars
 from db.queries import QueriesPosts, QueriesThreads
 from postsaver import ForumPostSaver
@@ -20,32 +24,25 @@ all_elements = []
 # "recrutement_staff",
 # discussions
 # "teams",
-
-# =====REMAINING=====
-# "presentation_de_teams",
-# "recrutement_teams",
 # "suggestions_idees",
 # "ameliorations",
 # "propositions_de_mini_jeux",
 # "astuces_entraide",
-# "demande_daide_questions",
-# "signaler_un_bug",
-# "bugs_traites",
-# "hors_sujet",
-# "les_jeux_forum",
-# "presentez_vous",
-# "presentation_du_staff",
-# "vos_talents_creations",
 # "demandes_de_creations",
-# "discussions_minecraft",
 # "maps_constructions_redstone",
+# "discussions_minecraft",
 # "resource_packs",
 # "mods_plugins_outils"
+# "vos_talents_creations",
+# "demande_daide_questions",
+# "signaler_un_bug",
+# "presentation_de_teams",
+# "recrutement_teams",
+# "hors_sujet",
 
+# for category in ["hors_sujet"]:
 
-
-# for category in THREADS_PAGES.keys():
-for category in ["presentation_de_teams"]:
+for category in THREADS_PAGES.keys():
     DbVars.QueuePosts.add_important_instruction(QueriesPosts.get_create_repo_table_query(category))
     query = F"SELECT * FROM {category}"
     results = DbVars.ReadInstanceThreads.cursor.execute(query).fetchall()

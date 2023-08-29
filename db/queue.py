@@ -32,7 +32,7 @@ class DbQueue(Thread):
     def _process_important_instructions(self) -> None:
         while len(self.important_instructions) > 0:
             self.cursor.execute(self.important_instructions.pop(0))
-            
+        
         self.connection.commit()
         # self.connection.serialize()
 
@@ -54,15 +54,16 @@ class DbQueue(Thread):
 
     def run(self) -> None:
         while True:
-            if self.should_stop:
+            lenimp = len(self.important_instructions)
+            lennor = len(self.instructions)
+            if self.should_stop and lenimp == 0 and lennor == 0:
                 break
 
             sleep(1)
-
             # perform create table queries BEFORE insert queries
-            if len(self.important_instructions) > 0:
+            if lenimp > 0:
                 self._process_important_instructions()
             
             # then perform normal (insert) queries
-            if len(self.instructions) > 0:
+            if lennor > 0:
                 self._process_normal_instruction()
