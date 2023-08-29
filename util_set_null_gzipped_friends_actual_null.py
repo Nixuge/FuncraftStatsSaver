@@ -2,13 +2,12 @@ import gzip
 import sqlite3
 
 
-connection = sqlite3.connect("funcraft_database.db", isolation_level='DEFERRED')
+connection = sqlite3.connect("funcraft_database.db")
 
 all = connection.cursor().execute("SELECT * FROM funcraft_stats;").fetchall()
 
 QUERY = ""
 print("done querying")
-count = 0
 
 bad_ids = []
 
