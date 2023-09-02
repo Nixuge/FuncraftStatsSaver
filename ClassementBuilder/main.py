@@ -123,7 +123,18 @@ def remove_empty_tables():
             del_query = f"DROP TABLE {table[0]}"
             connection.cursor().execute(del_query)
 
-
-
+def build_indexes():
+    sql_query = """SELECT name FROM sqlite_master WHERE type='table';"""
+    connection = sqlite3.connect("rankings.db")
+    all_tables = connection.cursor().execute(sql_query).fetchall()
+    for table in all_tables:
+        print("building for " + table[0])
+        query1 = f"CREATE INDEX idx_{table[0]}_usernameup on {table[0]}(username_upper);"
+        query2 = f"CREATE INDEX idx_{table[0]}_ranking on {table[0]}(ranking);"
+        connection.cursor().execute(query1)
+        connection.cursor().execute(query2)
+        connection.commit()
+        
 # build_per_game()
 # remove_empty_tables()
+# build_indexes()
